@@ -1,0 +1,27 @@
+# fly.toml app configuration file generated for api-hidden-sea-1575 on 2024-07-20T12:53:20+05:30
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'api-hidden-sea-1575'
+primary_region = 'syd'
+
+[env]
+  ASPNETCORE_URLS="http://+:8080"
+  StripeSettings__PublishableKey="pk_test_51PWvpMCCBCy76ym5UFkfa8sJaYLAG2yV31wEJfU71KEwgFCl2vBnlPkh1I6vfC1PdTMUfsUejHxz0oApEpQlnKQ4007ddTqMz6"
+
+[build]
+  image = 'tamaghna/restore:latest'
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1
