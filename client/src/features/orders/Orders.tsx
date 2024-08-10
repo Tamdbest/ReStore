@@ -10,7 +10,7 @@ import { getCurrency } from "../../app/util/util";
 export default function Orders(){
     const [orders,setOrders]=useState<Order[]|null>(null);
     const [loading,setLoading]=useState(true)
-    const [orderNum,setOrderNum]=useState(0)
+    const [orderNum,setOrderNum]=useState(-1)
     useEffect(()=>{
         agent.Orders.list()
             .then(orders=>setOrders(orders))
@@ -20,8 +20,8 @@ export default function Orders(){
     if(loading) 
         return <LoadingComponent message="Loading your orders"/>
 
-    if(orderNum>0)
-      return <ViewOrder order={orders![orderNum-1]} goBack={()=>setOrderNum(0)}/>
+    if(orderNum>=0)
+      return <ViewOrder order={orders![orderNum]} goBack={()=>setOrderNum(-1)}/>
 
     return(
     <TableContainer component={Paper} sx={{mb:4}}>
@@ -36,9 +36,9 @@ export default function Orders(){
           </TableRow>
         </TableHead>
         <TableBody>
-          {orders?.map((order) => (
+          {orders?.map((order,idx) => (
             <TableRow
-              key={order.id}
+              key={idx}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
@@ -47,7 +47,7 @@ export default function Orders(){
               <TableCell align="right">{getCurrency(order.total)}</TableCell>
               <TableCell align="right">{order.orderDate.split("T")[0]}</TableCell>
               <TableCell align="right">{order.orderStatus}</TableCell>
-              <TableCell align="right"><Button onClick={()=>setOrderNum(order.id)}>View</Button></TableCell>
+              <TableCell align="right"><Button onClick={()=>setOrderNum(idx)}>View</Button></TableCell>
             </TableRow>
           ))}
         </TableBody>
